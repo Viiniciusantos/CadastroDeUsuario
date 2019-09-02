@@ -1,0 +1,91 @@
+﻿@model App.TailorIT.Application.ViewModels.UsuarioViewModel
+
+@{
+    ViewData["Title"] = "Criar novo usuário";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" id="CreateUser">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataNascimento" class="control-label"></label>
+                <input asp-for="DataNascimento" class="form-control" />
+                <span asp-validation-for="DataNascimento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Senha" class="control-label"></label>
+                <input asp-for="Senha" type="password" class="form-control" />
+                <span asp-validation-for="Senha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SexoId" class="control-label"></label>
+                <select asp-for="SexoId" class="form-control" asp-items="@(new SelectList(Model.Sexos, "SexoId", "Descricao"))">
+                    <option></option>
+                </select>
+                <span asp-validation-for="SexoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-info" />
+                <a class="btn btn-warning" href="javascript:window.history.back();">Voltar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $("#CreateUser").submit(function (event) {
+            event.preventDefault();
+            var formdata = new FormData(document.querySelector('#CreateUser'));
+            $.ajax({
+                type: "POST",
+                url: $("#CreateUser").attr("action"),
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    if (response == true) {
+                        swal({
+                            text: "Usuário inserido com sucesso",
+                            icon: "success",
+                            button: {
+                                confirm: {
+                                    text: "OK",
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: false
+                                }
+                            },
+                        }).then((value) => {
+                            location.reload();
+                        });
+                    }
+                },
+                error: function () {
+                    swal({
+                        text: "Erro ao inserir o usuário",
+                        icon: "error",
+                    });
+                }
+            });
+        });
+    </script>
+
+}
