@@ -6,4 +6,3 @@ Sistema de cadastro de usuário com validações com relatórios e filtros.
 * Entity Framework
 * Ajax
 * Bootstrap 4
-
